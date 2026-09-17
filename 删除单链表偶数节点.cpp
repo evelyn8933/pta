@@ -47,28 +47,27 @@ struct ListNode *createlist()
 }
 struct ListNode *deleteeven( struct ListNode *head )
 {
-    while(head!=NULL&&head->data%2==0) //判断条件要先判断有效 
-    {struct ListNode *t=head;
-     head=head->next;
-	 free(t);     
-	}
-	struct ListNode *p=head;
-	while(p!=NULL&&p->next!=NULL)
-	{
-		struct ListNode *temp=p->next;
-		if(temp->data%2==0)
-		{   if(temp->next!=NULL)
-			{
-			p->next=temp->next;
-			free (temp);
-		    }
-		    else 
-		    { p->next=NULL;
-		      free(temp);
-			}
-		}
-		else p=p->next;          
-	}
-	return head;
+    struct ListNode *deleteeven( struct ListNode *head )
+{
+    struct ListNode dummy;   // 虚拟头结点，简化头节点删除逻辑
+    dummy.next = head;
+    struct ListNode *p = &dummy;
+
+    while(p->next != NULL)
+    {
+        struct ListNode *temp = p->next;
+        if(temp->data % 2 == 0)
+        {
+            p->next = temp->next;
+            free(temp);
+        }
+        else
+        {
+            p = p->next;
+        }
+    }
+    return dummy.next;
+}
+
 }
 /* 你的代码将被嵌在这里 */
