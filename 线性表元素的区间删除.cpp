@@ -50,22 +50,17 @@ int main()
 /* ==========在这里写你的Delete函数========== */
 List Delete( List L, ElementType minD, ElementType maxD )
 {
-	int last=L->Last;
-	while(L->Data[last]>minD&&L->Data[last]<maxD)
-	{
-		last--;
-	 } 
-	 for(int i=0;i<last;i++)
-	 {
-	 	if(L->Data[i]>minD&&L->Data[i]<maxD)
-	 	 {
-	 	 	for(int j=i;j<last;j++)
-	 	 	 {	L->Data[j]=L->Data[j+1];
-			   }
-			last--;
-			i--;
-		  }
-	 }
-	 L->Last=last;
-	 return L;
+    Position i, j;
+    j = 0; // j：保存保留元素的存放位置
+    for(i = 0; i <= L->Last; i++)
+    {
+        // 保留：不满足 minD < x < maxD 的元素
+        if( !(L->Data[i] > minD && L->Data[i] < maxD) )
+        {
+            L->Data[j++] = L->Data[i];
+        }
+    }
+    L->Last = j - 1;
+    return L;
 }
+
