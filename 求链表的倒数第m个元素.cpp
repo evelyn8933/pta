@@ -56,22 +56,21 @@ void Print( List L )
 }
 /* 你的代码将被嵌在这里 */
 ElementType Find( List L, int m )
-{   if(L==NULL) return ERROR;
-	List lp=L->Next; //注意有头结点 
-	int sum=0;
-	while(lp!=NULL)
-	{sum++;
-	lp=lp->Next;
-	}
-	if(m>sum) return ERROR;
-	int i=0,outcome;
-	lp=L->Next;
-	while(lp!=NULL)
-	{   i++;
-	    if(i==sum+1-m) 
-	    { 
-	    return lp->next;
-		}
-		lp=lp->Next;
-	}
+{
+    List fast, st;
+    fast = st = L->Next;
+    int num = 0;
+    while (fast!=NULL&&num < m)
+    {
+        num++;
+        fast = fast->Next;
+    }
+    if (num<m) return ERROR; //不要判断fast==NULL 不然长度正好等于M会出错 
+    else 
+        while (fast != NULL)
+        {
+            fast = fast->Next;
+            st = st->Next;
+        }
+    return st->Data;
 }
