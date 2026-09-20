@@ -1,70 +1,49 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <stdbool.h>
+#include <math.h>
 typedef struct node 
 {int data;
 int next;
 } node;
 node origin[100000];
-node del[100000]; 
-bool record[100000];
+bool record[100001]={0};
 int main()
-{  int first,n;
+{  int remain[100001];
+int del[100001];
+int first,n;
 scanf("%d%d",&first,&n);
 for(int i=0;i<n;i++)
-{  int  cur;
+{
+	int cur;
 	scanf("%d",&cur);
-	scanf("%d%d",&origin[cur].data,&origin[cur].next);	
+	scanf("%d%d",&origin[cur].data,&origin[cur].next); 
 }
-
-int last=-1,position=first;
-int second=0;
-int head=-1,flag=0;//防止sefist没有值使用崩溃 
+int position=first; 
+int recnt=0,delcnt=0;
 while(position!=-1)
-{  int ab= origin[position].data; //提前缓存 
-   int cd=origin[position].next;//防止多次访问数组导致超时 
-if(record[abs(ab)])
-     {
-     	if(flag==0)
-     	 { 
-     	   head=position; //记录新表头 
-     	   flag=1;
-		  }
-		else
-		{del[second].next=position;		
-		}
-		 second=position;
-		 del[position].data=ab;
-		 del[position].next=-1;		 
-	 
-       if(last!=-1)
-        {
-          origin[last].next= cd;	
-        }
-    }
-   else 
+{   int nxt=origin[position].next;
+    int ab=origin[position].data;
+    if(record[abs(ab)]==false)
      { record[abs(ab)]=true;
-      last=position;
-     }	
-     position=cd;
+       remain[recnt++]=position;	
+     }
+     else 
+     {del[delcnt++]=position;
+	 }
+     position=nxt;
 }
-origin[last].next=-1;
-while(first!=-1)
-{  int td=origin[first].next;
-	printf("%05d %d ",first,origin[first].data);
-	if(td!=-1)
-	printf("%05d\n",td);
-	else printf("%d\n",td);
-	first=td;
+for(int i=0;i<recnt;i++)
+{   int cur=remain[i];
+	printf("%05d %d ",cur,origin[cur].data); 
+	if(i<recnt-1) printf("%05d\n",remain[i+1]);
+	else printf("-1\n");
 }
-while(head!=-1)
-{  printf("%05d %d ",head,del[head].data);
-int td=del[head].next;
-if(td!=-1)
-	printf("%05d\n",td);
-	else printf("%d\n",td);
-   head=td;	
+for(int j=0;j<delcnt;j++)
+{
+	int cur=del[j];
+	printf("%05d %d ",del[j],origin[cur].data);
+	if(j<delcnt-1) printf("%05d\n",del[j+1]);
+	else printf("-1\n");
 }
 return 0;
  } 
