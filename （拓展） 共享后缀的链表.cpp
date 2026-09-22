@@ -62,16 +62,27 @@ int main()
 PtrToNode Suffix( List L1, List L2 ) 
 {
 	List p1=L1->Next ,p2=L2->Next ; //有头结点 
-	while(p1!=NULL)
-	{
-		while(p2!=NULL&&p2!=p1) //是节点相同而不是data相同 
-		  {
-			p2=p2->Next;
-		  }
-		  if(p2!=NULL) return p2;
-		  else p2=L2->Next; 
-	    p1=p1->Next ; 
+	int len1=0,len2=0;
+	for(;p1!=NULL;p1=p1->Next)  len1++; //长链表前面多出来的结点不可能是公共后缀的一部分
+	for(;p2!=NULL;p2=p2->Next)  len2++; //让两个指针走到「离末尾距离相等」的位置 然后两个指针同步往后走
+	p1=L1->Next;
+	p2=L2->Next;
+	if(len1>len2)
+	{ for(int i=0;i<len1-len2;i++)
+	   {p1=p1->Next;
+	   }
 	}
+	else
+	{ for(int i=0;i<len2-len1;i++)
+	   {p2=p2->Next;
+	   }
+	} 
+	while(p1!=NULL&&p2!=NULL)
+	{
+		if(p1==p2) return p1;
+		p1=p1->Next;
+		p2=p2->Next; 
+	}	 
 	return NULL;
 }
 /* 你的代码将被嵌在这里 */
