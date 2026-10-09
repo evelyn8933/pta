@@ -17,21 +17,20 @@ int main()
 	for(int i=0;i<len;)
 	{  
 		char ch=str[i];
-		char cur;
-		if(ch==' ') 
-		{i++;
-		continue;
-	    }
-		else 
-		{ char token[50];
+		char cur;	
+		char token[50];
 		  int index=1;
 		  token[0]=ch;
-		  i++; 
-		  for(index=1;i<len&&str[i]>='0'&&str[i]<='9';i++) 
-		  {   token[index++]=str[i];		  	
-		  }
+		  if((ch>='0'&&ch<='9')||ch=='-')
+		  {
+		    i++; 
+		    for(index=1;i<len&&str[i]>='0'&&str[i]<='9';i++) 
+		    {   token[index++]=str[i];		  	
+		    }
+	      }
+	      i--;
 		  token[index]='\0';
-		  if(index==1) 
+		  if(index==1&&(ch>'9'||ch<'0')) 
 		  {  if(ch=='(')
 		    { 
 			stack[top++]='(';			
@@ -62,7 +61,6 @@ int main()
 		  {  for(int j=0;j<index;j++)
 		  	printf("%c ",token[j]);
 		  }		
-		}
 		
 	}
 	while(top>0)
