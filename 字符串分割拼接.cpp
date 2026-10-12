@@ -7,8 +7,9 @@ int main()
   char p;
   getline(cin,origin);
   cin>>p;
-  cin.ignore();
+  cin.ignore(); 
   getline(cin,s);
+  cout<<s<<endl;
   vector <string> sum;
   string cur;
   int index=0,len=origin.size();
@@ -21,9 +22,9 @@ int main()
   	{ if(cur.size()!=0)
 	   {
 	   sum.push_back(cur);
-	   index++;
 	   }
-	   pdex.push_back(index); 
+	   if(pdex.size()==0||pdex.back()!=sum.size()) 
+	       pdex.push_back(sum.size()); 
 	   cur.clear();
 	}
 	else
@@ -36,13 +37,11 @@ if(origin[len-1]!=p) sum.push_back(cur);
 int j=0;
 	for(int i=0;i<sum.size();i++)
 	{ if(i) cout<<' ';
-	cout<<'"'<<sum[i]<<'"';
-	if(i!=sum.size()-1) cout<<',';
+	cout<<'"'<<sum[i]<<'"'<<',';
 	if(j<pdex.size()&&i+1==pdex[j++]) 
 	 { if(j!=0) cout<<" ";
 	   cout<<'"';
-	   cout<<'"';
-	   if(i!=sum.size()-1) cout<<',' ;
+	   cout<<'"'<<',';
      }
 	}
 	cout<<"]"<<endl; 
@@ -50,11 +49,10 @@ int j=0;
 	{ if(i) cout<<' ';
 	      cout<<sum[i];
 	   if(j<pdex.size()&&i+1==pdex[j++]) 
-	     { if(j!=0) cout<<' ';
-	       if(i!=sum.size()-1) 
-	       {cout<<s<<' '<<s;
-		   }
+	     { if(i!=sum.size()-1) 
+	       {cout<<s<<s;}
 	       else cout<<s;
          }
 	}	
  } 
+
