@@ -14,7 +14,7 @@ Stack &create(int m)
 	mp->data =(int *)malloc(sizeof(int)*m);
 	mp->max=m;
 	mp->top=0;
-	return *mp;
+	return *mp; //不要返回局部变量的地址 
 }
 int IsFull(Stack S)
 {
@@ -43,7 +43,7 @@ void AddQ(ElementType item)
 {
 	if(IsFull(in))
 	{
-		if(!IsEmpty(out))
+		if(!IsEmpty(out))//只有out为空的时候才能倒  
 		{
 			printf("ERROR:Full\n");
 			return ;
