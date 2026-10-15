@@ -102,15 +102,15 @@ void DynamicArray_insert(DynamicArray* this, size_t pos, const Elem* v)
 		 free(this->data);
          this->data=num;
 	   }
-    size_t len=this->size ;
+    int len=this->size ;
     Elem *cur=this->data ;
-    this->size=this->size +1; 
+   	this->size=this->size +1; 
     if(pos==len||len==0) 
     { cur[pos]=*v;
     return;
 	}
 	int index;
-	for(index=len-1;index>=pos;index--)
+	for(index=(int)len-1;index>=(int)pos;index--) //强转(int)防止无符号下溢，否则当 pos=0 时会无限循环越界
 	{   cur[index+1]=cur[index];	
 	}
 	cur[pos]=*v;
@@ -123,22 +123,25 @@ void DynamicArray_insert(DynamicArray* this, size_t pos, const Elem* v)
 //     size = 6, 数组中的元素为0,1,2,3,4,5。删除了pos=3的元素3之后，数组的元素变为0,1,2,4,5，size=5，数组第3个元素为4
 Elem DynamicArray_erase(DynamicArray* this, size_t pos)
 {  int number=this->data[pos];
-size_t index;
-	for(index=pos;index<this->size ;index++)
+int  index;
+	for(index=pos;index<this->size-1 ;index++)//index到size-1 不然+1会越界 
 	 {
 	 	this->data[index]=this->data[index+1];
 	 }
 	 this->size=this->size -1; 
-	 if(this->size<(this->capacity )/4) 
+	if(this->size<(this->capacity )/4 &&this->capacity > 16)
+	{ while(this->size<(this->capacity )/4 &&this->capacity>16) //循环只用来计算最终的容量
+	 //等到容量确定后，在循环外面只分配一次内存
 	 {  this->capacity/=2;
-	 	Elem *num=(Elem*)malloc(sizeof(Elem)*this->capacity);
+	 }
+	 Elem *num=(Elem*)malloc(sizeof(Elem)*this->capacity);
 	 	int i=0;
 	 	for(i=0;i<this->size;i++)
        	   num[i]=this->data[i];
 		   free(this->data);
-		   this->data=num;	 	
-	 }
-	 return pos;
+		   this->data=num;	 
+    }
+	 return number;
 }
 
 // 获取位置为pos的元素，假设pos总是合法的。
@@ -152,7 +155,7 @@ void DynamicArray_set(DynamicArray* this, size_t pos, const Elem* v)
 {
 	this->data[pos]=*v;
 	if(pos>=this->size) 
-	this->size=this->size +1; 
+	this->size = pos + 1; // 修正：如果设置的是下标10，size应该变成11
 	return ;
 }
 
@@ -182,20 +185,29 @@ bool DynamicArray_empty(const DynamicArray* this)
 //    2. 原数组为0,1,2,3，新数组大小为6，那么数组变为0,1,2,3,?,?，size=6，其中?表示任意值，即这些多出的元素
 //       不需要初始化
 void DynamicArray_resize(DynamicArray* this, size_t new_size)
-{   
-	if(new_size>this->capacity )
+{   if(new_size>this->capacity )
+  {	while(new_size>this->capacity )//因为可能扩充一次还不够 
 	{
-		this->capacity*=2;
-       	 Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
+		this->capacity =(this->capacity)*2;	   
+	}
+	Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
        	 int i=0;
-       	 for( i=0;i<this->size;i++)
+       	 for( i=0;i<new_size;i++)//只复制到new_size  不然可能越界 capacity变小了 
        	   num[i]=this->data[i];
 		 free(this->data);
 		 this->data=num;
-		 this->size=new_size;
-		 return ;	   
+  }
+  else if(new_size<(this->capacity )/4&&this->capacity >16) 
+    {   while(new_size<(this->capacity )/4&&this->capacity >16)
+         this->capacity=( this->capacity )/2;
+    	 Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
+       	 int i=0;
+       	 for( i=0;i<new_size;i++)
+       	   num[i]=this->data[i];
+		 free(this->data);
+		 this->data=num;
 	}
-	this->size=new_size;	
+		 this->size=new_size;
 	return;
 }
 
@@ -205,6 +217,7 @@ void DynamicArray_delete(DynamicArray* this)
 this->data=NULL;
   this->capacity =0;
   this->size =0;
+  free(this); //结构体也要删除 
   return ;
 }
 /* 请在这里填写答案 */
