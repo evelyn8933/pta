@@ -26,7 +26,6 @@ int kmp(string mains,string son)
     int len=mains.size(),m=son.size();
 	int *next=new int[m];
 	get_next(son,next); 
-	int start=0;
 	int i=0,j=0; 
 	while(i<len&&j<m)
 	{ if(j==-1||mains[i]==son[j])
@@ -36,16 +35,15 @@ int kmp(string mains,string son)
 	  else 
 	  {
 	  j=next[j];//更新是怎么更新的 
-	  start=i;
       }  
 	}
 	delete []next; 
-	if(j==m) return start;
+	if(j==m) return i-m; 
 	else return -1;
 }
 int main()
 { string s,t;
   cin>>s>>t; 
   int a=kmp(s,t);
-  cout<<a+1;	
+  cout<<a;	
 }
