@@ -192,7 +192,7 @@ void DynamicArray_resize(DynamicArray* this, size_t new_size)
 	}
 	Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
        	 int i=0;
-       	 for( i=0;i<new_size;i++)//只复制到new_size  不然可能越界 capacity变小了 
+       	 for( i=0;i<this->size;i++)//只复制到nthis->SIZE  不然可能越界 capacity变小了 
        	   num[i]=this->data[i];
 		 free(this->data);
 		 this->data=num;
@@ -202,7 +202,7 @@ void DynamicArray_resize(DynamicArray* this, size_t new_size)
          this->capacity=( this->capacity )/2;
     	 Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
        	 int i=0;
-       	 for( i=0;i<new_size;i++)
+       	 for( i=0;i<new_size;i++)////只复制到new_size  不然可能越界 capacity变小
        	   num[i]=this->data[i];
 		 free(this->data);
 		 this->data=num;
