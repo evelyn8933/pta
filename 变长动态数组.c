@@ -97,19 +97,20 @@ void DynamicArray_insert(DynamicArray* this, size_t pos, const Elem* v)
        { this->capacity*=2;
        	 Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
        	 int i;
-			for(i=0;i<this->size;i++)
+			for(i=0;i<this->size;i++) //在C里面不可以在for()定义新变量 
        	   num[i]=this->data[i];
-		 delete[]this->data;
+		 free(this->data);
          this->data=num;
 	   }
     size_t len=this->size ;
     Elem *cur=this->data ;
-    this->size++;
-    if(pos==len) 
-    { cur[size]=*v;
+    this->size=this->size +1; 
+    if(pos==len||len==0) 
+    { cur[pos]=*v;
     return;
 	}
-	for(int index=len-1;index>=pos;index--)
+	int index;
+	for(index=len-1;index>=pos;index--)
 	{   cur[index+1]=cur[index];	
 	}
 	cur[pos]=*v;
@@ -122,17 +123,19 @@ void DynamicArray_insert(DynamicArray* this, size_t pos, const Elem* v)
 //     size = 6, 数组中的元素为0,1,2,3,4,5。删除了pos=3的元素3之后，数组的元素变为0,1,2,4,5，size=5，数组第3个元素为4
 Elem DynamicArray_erase(DynamicArray* this, size_t pos)
 {  int number=this->data[pos];
-	for( size_t index=pos;index<this->size ;index++)
+size_t index;
+	for(index=pos;index<this->size ;index++)
 	 {
 	 	this->data[index]=this->data[index+1];
 	 }
-	 this->size--;
+	 this->size=this->size -1; 
 	 if(this->size<(this->capacity )/4) 
 	 {  this->capacity/=2;
 	 	Elem *num=(Elem*)malloc(sizeof(Elem)*this->capacity);
-	 	for(int i=0;i<this->size;i++)
+	 	int i=0;
+	 	for(i=0;i<this->size;i++)
        	   num[i]=this->data[i];
-		   delete[]this->data;
+		   free(this->data);
 		   this->data=num;	 	
 	 }
 	 return pos;
@@ -148,6 +151,8 @@ Elem DynamicArray_get(const DynamicArray* this, size_t pos)
 void DynamicArray_set(DynamicArray* this, size_t pos, const Elem* v)
 {
 	this->data[pos]=*v;
+	if(pos>=this->size) 
+	this->size=this->size +1; 
 	return ;
 }
 
@@ -159,7 +164,7 @@ size_t DynamicArray_capacity(const DynamicArray* this)
 
 // 返回数组的元素个数。
 size_t DynamicArray_size(const DynamicArray* this)
-{ return (this->size );
+{ return (this->size);
 }
 
 // 返回数组元素是否为空，为空则返回true，否则返回false。
@@ -182,9 +187,10 @@ void DynamicArray_resize(DynamicArray* this, size_t new_size)
 	{
 		this->capacity*=2;
        	 Elem*num=(Elem*)malloc(sizeof(Elem)*this->capacity );
-       	 for(int i=0;i<this->size;i++)
+       	 int i=0;
+       	 for( i=0;i<this->size;i++)
        	   num[i]=this->data[i];
-		 delete[]this->data;
+		 free(this->data);
 		 this->data=num;
 		 this->size=new_size;
 		 return ;	   
@@ -195,7 +201,7 @@ void DynamicArray_resize(DynamicArray* this, size_t new_size)
 
 // 删除数组。不要忘记释放原有数组的空间，否则会造成内存泄漏。
 void DynamicArray_delete(DynamicArray* this)
-{ delete[](this->data);
+{free(this->data);
 this->data=NULL;
   this->capacity =0;
   this->size =0;
