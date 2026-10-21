@@ -22,7 +22,7 @@ void dfs(int x,int y)
 }
 int main()
 { scanf("%d %d",&m,&n);
-getchar();
+getchar();// 吃掉m,n后面的换行！重点！
 int i,j;
 for(i=0;i<m;i++)
 {
@@ -30,7 +30,7 @@ for(i=0;i<m;i++)
 	{
 		scanf("%c",&trix[i][j]);
 	}
-	getchar();
+	getchar();// 读完一行吃掉行尾换行
 }
 int p,q;
    for(p=0;p<m;p++)
