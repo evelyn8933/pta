@@ -36,7 +36,6 @@ int root(int lchild[1001],int rchild[1001],int n)
 		break;
 		}
 	}
-	printf("%d\n",index);
    return index;		
 }
 int same(int root1,int root2)
@@ -45,14 +44,14 @@ int same(int root1,int root2)
    if(A1[l1]==A2[l2])
    {   if(A1[r1]==A2[r2])
       {  if(same(l1,l2)&&same(r1,r2)) return 1;
-      else return 0;
+         else return 0;
       }
       else return 0;
-  }
+   }
    else if(A1[l1]==A2[r2])
    {  if(A1[r1]==A2[l2])
       {  if(same(l1,r2)&&same(r1,l2)) return 1;
-      else return 0;
+         else return 0;
       }
       else return 0;  	  
    }
