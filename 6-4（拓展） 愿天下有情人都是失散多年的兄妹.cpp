@@ -13,16 +13,17 @@ void dfs(int curid,int dep)
   return ;
 }
 bool check(int x,int dep)
-{  if(x==-1||dep>=5) return 1;
-   if(vis[x]) return 0;
-   else vis[x]=1;
-   if(check(fa[x],dep+1)&&check(mo[x],dep+1)) 
+{  if(x==-1||dep>=5) return 1;//说明可以走到头 是合法的 
+   if(vis[x]) return 0; //有共同祖先 
+   else vis[x]=1; 
+   if(check(fa[x],dep+1)&&check(mo[x],dep+1)) //全都没有共同祖先 
      return 1;
-    else return 0;
-	
+    else return 0;	
 }
 int main()
-{ int n;
+{ memset(fa,-1,sizeof(fa)); //fa mo初始化都应该为-1  
+ memset(mo,-1,sizeof(mo));
+ int n;
 scanf("%d",&n);
 int i=0;
 for(i=0;i<n;i++)
