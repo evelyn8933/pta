@@ -14,12 +14,11 @@ struct TT
 void push(int a)
 {
 	num[rear++]=a;
-	printf("%d",a);
 }
 int pop()
 {
 	int c=num[front];
-	front=front+1;
+	front++;
 	return c;
 }
 int main()
@@ -27,11 +26,17 @@ int main()
     int ancestor;
    scanf("%d",&n);
    struct TT family[100001];
-   int i=0;
-   while(i<n)
+   int h;
+   for(h = 1; h<=n; h++) //注意下标对齐 
+{
+    family[h].child = NULL; //因为在连接孩子节点的时候要判断头指针是不是为空 
+    family[h].karry = 0;//为了防止垃圾值需要对所有链表初始化 
+}
+   int i=1;
+   while(i<=n)
    { int cur;
-     scanf("%d",&cur);
-     family[i].parent=cur;
+     scanf("%d",&cur); //如果从0开始下标对不上 
+     family[i].parent=cur;//赋值和==区别开 
      if(cur==-1) 
 	 {
 	 ancestor=i;
@@ -39,8 +44,8 @@ int main()
      }
      else 
      {  struct node *p1=(struct node*)malloc(sizeof(struct node));
-        p1->index==i;
-        p1->next==NULL;
+        p1->index=i;
+        p1->next=NULL;
      	if(family[cur].child==NULL)
      	  {
      	  	family[cur].child=p1;
@@ -55,29 +60,28 @@ int main()
    }
    push(ancestor);
    int maxkarry=1;
-   while(rear ==front )
-   {
+   while(rear!=front )
+   {  
    	  int p=pop();
-   	  printf("%d",p);
    	  int nowk=family[p].karry ;
    	  struct node *kid=family[p].child;
 	  while(kid!=NULL)
 	  {  
 	  	 int s=kid->index;
-	  	  printf("%d",s);
 	  	 family[s].karry=nowk+1;
+	  	 if(nowk+1>maxkarry) maxkarry=nowk+1;//跟孩子的Karry比较 
 	  	 push(s);
 	  	 kid=kid->next;
-	  }
-	   if(nowk>maxkarry) maxkarry=nowk; 
+	  } 
    }
    printf("%d\n",maxkarry);
-   int j=0;
+   int j=1;
    int flag=0;
-   while(j<n)
+   while(j<=n)
    {  if(family[j].karry ==maxkarry) 
        {  if(flag) printf(" ");
        	  printf("%d",j);
+       	  flag++;
 	   }
    	j++;
    }
